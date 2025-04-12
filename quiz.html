@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classroom Science Quiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredericka+the+Great&family=Gochi+Hand&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Gochi Hand', cursive;
+            background-color: #8B5A2B;
+            background-image: url('https://www.transparenttextures.com/patterns/black-paper.png');
+            color: white;
+            overflow-x: hidden;
+            height: 100vh;
+        }
+        
+        .classroom {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        /* Floating classroom items */
+        .floating-item {
+            position: absolute;
+            opacity: 0.8;
+            animation: float 6s infinite ease-in-out;
+            z-index: 1;
+            filter: drop-shadow(2px 4px 4px rgba(0,0,0,0.3));
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+        
+        .pencil { top: 10%; left: 5%; animation-delay: 0s; }
+        .ruler { top: 20%; right: 8%; animation-delay: 1s; }
+        .book { bottom: 15%; left: 7%; animation-delay: 2s; }
+        .flask { bottom: 25%; right: 5%; animation-delay: 3s; }
+        .globe { top: 30%; left: 15%; animation-delay: 0.5s; }
+        .apple { bottom: 10%; right: 15%; animation-delay: 1.5s; }
+        .atom { top: 15%; right: 20%; animation-delay: 2.5s; }
+        .beaker { bottom: 30%; left: 20%; animation-delay: 3.5s; }
+        
+        /* Main menu */
+        .main-menu {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 10;
+            width: 80%;
+            max-width: 600px;
+            animation: fadeIn 1s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translate(-50%, -40%); }
+            to { opacity: 1; transform: translate(-50%, -50%); }
+        }
+        
+        .main-menu h1 {
+            font-family: 'Fredericka the Great', cursive;
+            font-size: 3.5rem;
+            color: #FFD700;
+            text-shadow: 3px 3px 0 #8B4513;
+            margin-bottom: 2rem;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .subject-choices {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .subject-btn {
+            background-color: #4B5320;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            font-size: 1.5rem;
+            font-family: 'Gochi Hand', cursive;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .subject-btn:hover {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+        
+        .subject-btn i {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+        
+        .subject-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
+            transform: rotate(45deg);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .subject-btn:hover::before {
+            opacity: 1;
+        }
+        
+        /* Chalkboard */
+        .chalkboard-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 800px;
+            height: 70vh;
+            perspective: 1000px;
+            display: none;
+            z-index: 10;
+        }
+        
+        .chalkboard {
+            background-color: #013220;
+            background-image: url('https://www.transparenttextures.com/patterns/black-paper.png');
+            border: 15px solid #5D4037;
+            border-radius: 10px;
+            width: 100%;
+            height: 100%;
+            padding: 30px;
+            box-shadow: 
+                0 0 30px rgba(0,100,0,0.7),
+                inset 0 0 50px rgba(0,0,0,0.5);
+            position: relative;
+            transform-style: preserve-3d;
+            animation: boardGlow 3s infinite alternate;
+        }
+        
+        @keyframes boardGlow {
+            0% { box-shadow: 0 0 20px rgba(0,100,0,0.7), inset 0 0 50px rgba(0,0,0,0.5); }
+            100% { box-shadow: 0 0 40px rgba(0,150,0,0.9), inset 0 0 50px rgba(0,0,0,0.5); }
+        }
+        
+        .chalkboard::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                linear-gradient(90deg, rgba(0,0,0,0.1) 1px, transparent 1px),
+                linear-gradient(rgba(0,0,0,0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            pointer-events: none;
+        }
+        
+        .chalkboard::after {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            right: 5px;
+            bottom: 5px;
+            border: 1px dashed rgba(255,255,255,0.1);
+            pointer-events: none;
+        }
+        
+        .chalk-content {
+            color: #F8F8FF;
+            font-family: 'Gochi Hand', cursive;
+            text-shadow: 0 0 5px rgba(255,255,255,0.3);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 2px dashed rgba(255,255,255,0.2);
+            padding-bottom: 10px;
+        }
+        
+        .quiz-header h2 {
+            font-size: 2.5rem;
+            color: #FFD700;
+            text-shadow: 2px 2px 0 #8B4513;
+        }
+        
+        .quiz-header p {
+            font-size: 1.2rem;
+        }
+        
+        .question-container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .question-number {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #FFD700;
+        }
+        
+        .question-text {
+            font-size: 1.8rem;
+            line-height: 1.4;
+            margin-bottom: 30px;
+        }
+        
+        .options-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .option {
+            background-color: rgba(0,0,0,0.2);
+            border: 2px dashed rgba(255,255,255,0.2);
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.4rem;
+            position: relative;
+        }
+        
+        .option:hover {
+            background-color: rgba(0,0,0,0.4);
+            border-color: rgba(255,255,255,0.4);
+            transform: translateX(5px);
+        }
+        
+        .option.selected {
+            background-color: rgba(139, 0, 139, 0.3);
+            border-color: rgba(255, 0, 255, 0.5);
+        }
+        
+        .option.correct {
+            background-color: rgba(0, 100, 0, 0.3);
+            border-color: rgba(0, 255, 0, 0.5);
+        }
+        
+        .option.incorrect {
+            background-color: rgba(139, 0, 0, 0.3);
+            border-color: rgba(255, 0, 0, 0.5);
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        .nav-btn {
+            background-color: #5D4037;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+        
+        .nav-btn:hover {
+            background-color: #8D6E63;
+            transform: translateY(-2px);
+        }
+        
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .progress-container {
+            width: 100%;
+            height: 10px;
+            background-color: rgba(0,0,0,0.2);
+            border-radius: 5px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background-color: #FFD700;
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 5px;
+        }
+        
+        /* Results screen */
+        .results-container {
+            display: none;
+            text-align: center;
+            animation: fadeIn 1s;
+        }
+        
+        .score-display {
+            font-size: 2.5rem;
+            color: #FFD700;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 0 #8B4513;
+        }
+        
+        .badge-earned {
+            margin: 20px auto;
+            max-width: 300px;
+            animation: bounceIn 1s;
+        }
+        
+        @keyframes bounceIn {
+            0% { transform: scale(0.1); opacity: 0; }
+            60% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+        
+        .badge-icon {
+            font-size: 5rem;
+            margin-bottom: 10px;
+        }
+        
+        .badge-title {
+            font-size: 1.8rem;
+            color: #FFD700;
+            margin-bottom: 10px;
+        }
+        
+        .badge-desc {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+        
+        .action-btns {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .action-btn {
+            background-color: #5D4037;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+        
+        .action-btn:hover {
+            background-color: #8D6E63;
+            transform: translateY(-2px);
+        }
+        
+        .see-answers-btn {
+            background-color: #4B5320;
+        }
+        
+        .restart-btn {
+            background-color: #8B4513;
+        }
+        
+        .home-btn {
+            background-color: #8B008B;
+        }
+        
+        /* Answers review */
+        .answers-review {
+            display: none;
+            text-align: left;
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        
+        .answer-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed rgba(255,255,255,0.2);
+        }
+        
+        .answer-question {
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+        
+        .answer-correct {
+            color: #90EE90;
+            font-size: 1.2rem;
+        }
+        
+        .answer-user {
+            color: #FFA07A;
+            font-size: 1.2rem;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .main-menu h1 {
+                font-size: 2.5rem;
+            }
+            
+            .subject-btn {
+                width: 100px;
+                height: 100px;
+                font-size: 1.2rem;
+            }
+            
+            .subject-btn i {
+                font-size: 2.5rem;
+            }
+            
+            .quiz-header h2 {
+                font-size: 2rem;
+            }
+            
+            .question-text {
+                font-size: 1.5rem;
+            }
+            
+            .option {
+                font-size: 1.2rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .main-menu h1 {
+                font-size: 2rem;
+            }
+            
+            .subject-choices {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .quiz-header h2 {
+                font-size: 1.8rem;
+            }
+            
+            .question-text {
+                font-size: 1.3rem;
+            }
+            
+            .option {
+                font-size: 1.1rem;
+                padding: 10px 15px;
+            }
+            
+            .action-btns {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .action-btn {
+                width: 100%;
+                max-width: 200px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="classroom">
+        <!-- Floating classroom items -->
+        <div class="floating-item pencil">
+            <img src="https://cdn-icons-png.flaticon.com/512/3243/3243768.png" width="60" alt="Pencil">
+        </div>
+        <div class="floating-item ruler">
+            <img src="https://cdn-icons-png.flaticon.com/512/3243/3243773.png" width="60" alt="Ruler">
+        </div>
+        <div class="floating-item book">
+            <img src="https://cdn-icons-png.flaticon.com/512/3243/3243746.png" width="60" alt="Book">
+        </div>
+        <div class="floating-item flask">
+            <img src="https://cdn-icons-png.flaticon.com/512/3243/3243756.png" width="60" alt="Flask">
+        </div>
+        <div class="floating-item globe">
+            <img src="https://cdn-icons-png.flaticon.com/512/3243/3243761.png" width="60" alt="Globe">
+        </div>
+        <div class="floating-item apple">
+            <img src="https://cdn-icons-png.flaticon.com/512/3243/3243737.png" width="60" alt="Apple">
+        </div>
+        <div class="floating-item atom">
+            <img src="https://cdn-icons-png.flaticon.com/512/3243/3243739.png" width="60" alt="Atom">
+        </div>
+        <div class="floating-item beaker">
+            <img src="https://cdn-icons-png.flaticon.com/512/3243/3243743.png" width="60" alt="Beaker">
+        </div>
+        
+        <!-- Main Menu -->
+        <div class="main-menu" id="mainMenu">
+            <h1>Science Classroom Quiz</h1>
+            <div class="subject-choices">
+                <button class="subject-btn" id="physicsBtn">
+                    <i class="fas fa-rocket"></i>
+                    Physics
+                </button>
+                <button class="subject-btn" id="chemistryBtn">
+                    <i class="fas fa-flask"></i>
+                    Chemistry
+                </button>
+            </div>
+        </div>
+        
+        <!-- Chalkboard Quiz Container -->
+        <div class="chalkboard-container" id="quizContainer">
+            <div class="chalkboard">
+                <div class="chalk-content">
+                    <div class="quiz-header">
+                        <h2 id="quizSubject">Physics Quiz</h2>
+                        <p id="quizTopic">Test your knowledge!</p>
+                    </div>
+                    
+                    <div class="progress-container">
+                        <div class="progress-bar" id="progressBar"></div>
+                    </div>
+                    
+                    <!-- Question Screen -->
+                    <div id="questionScreen">
+                        <div class="question-container">
+                            <div class="question-number" id="questionNumber">Question 1 of 10</div>
+                            <div class="question-text" id="questionText">What is the question?</div>
+                            <div class="options-container" id="optionsContainer">
+                                <!-- Options will be inserted here -->
+                            </div>
+                        </div>
+                        
+                        <div class="navigation">
+                            <button class="nav-btn" id="prevBtn" disabled>
+                                <i class="fas fa-arrow-left"></i> Previous
+                            </button>
+                            <button class="nav-btn" id="nextBtn">
+                                Next <i class="fas fa-arrow-right"></i>
+                            </button>
+                            <button class="nav-btn" id="submitBtn" style="display: none;">
+                                Submit Quiz <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Results Screen -->
+                    <div class="results-container" id="resultsScreen">
+                        <div class="score-display" id="scoreDisplay">Your Score: 8/10</div>
+                        
+                        <div class="badge-earned" id="badgeEarned">
+                            <div class="badge-icon" id="badgeIcon">
+                                <i class="fas fa-rocket"></i>
+                            </div>
+                            <div class="badge-title" id="badgeTitle">Space Explorer</div>
+                            <div class="badge-desc" id="badgeDesc">You've mastered physics concepts!</div>
+                        </div>
+                        
+                        <div class="action-btns">
+                            <button class="action-btn see-answers-btn" id="seeAnswersBtn">
+                                <i class="fas fa-eye"></i> See Answers
+                            </button>
+                            <button class="action-btn restart-btn" id="restartQuizBtn">
+                                <i class="fas fa-redo"></i> Restart Quiz
+                            </button>
+                            <button class="action-btn home-btn" id="homeBtn">
+                                <i class="fas fa-home"></i> Back to Home
+                            </button>
+                        </div>
+                        
+                        <div class="answers-review" id="answersReview">
+                            <!-- Answers will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Enhanced Question Banks
+        const physicsQuestions = {
+            pendulum: [
+                {
+                    question: "What happens to a pendulum's period when you increase its length?",
+                    options: [
+                        "The period decreases",
+                        "The period increases",
+                        "The period stays the same"
+                    ],
+                    answer: 1,
+                    explanation: "The period of a pendulum is directly proportional to the square root of its length (T ∝ √L). So increasing the length increases the period."
+                },
+                {
+                    question: "At what point in the pendulum's swing is its kinetic energy greatest?",
+                    options: [
+                        "At the highest point",
+                        "At the lowest point",
+                        "Kinetic energy remains constant"
+                    ],
+                    answer: 1,
+                    explanation: "Kinetic energy is greatest at the lowest point where the speed is maximum, while potential energy is greatest at the highest points."
+                },
+                {
+                    question: "What happens to the pendulum's period if you double its length?",
+                    options: [
+                        "Period becomes √2 times longer",
+                        "Period becomes 2 times longer",
+                        "Period becomes 4 times longer"
+                    ],
+                    answer: 0,
+                    explanation: "Since period is proportional to the square root of length, doubling the length increases the period by √2 (about 1.414 times)."
+                },
+                {
+                    question: "What would happen to a pendulum on the Moon compared to Earth?",
+                    options: [
+                        "It would swing faster due to lower gravity",
+                        "It would swing slower due to lower gravity",
+                        "It would swing at the same rate"
+                    ],
+                    answer: 1,
+                    explanation: "With lower gravity on the Moon, the restoring force is weaker, causing the pendulum to swing more slowly (longer period)."
+                }
+            ],
+            spring: [
+                {
+                    question: "What does Hooke's Law state about springs?",
+                    options: [
+                        "Force is proportional to displacement",
+                        "Energy is conserved in spring systems",
+                        "Springs always return to original length"
+                    ],
+                    answer: 0,
+                    explanation: "Hooke's Law states that the force exerted by a spring is proportional to its displacement from equilibrium (F = -kx)."
+                },
+                {
+                    question: "Where is the speed greatest in a mass-spring system?",
+                    options: [
+                        "At maximum displacement",
+                        "At equilibrium position",
+                        "Speed is constant throughout"
+                    ],
+                    answer: 1,
+                    explanation: "Speed is greatest at equilibrium where all energy is kinetic, and zero at maximum displacement where all energy is potential."
+                },
+                {
+                    question: "What happens to the spring's oscillation if damping is increased?",
+                    options: [
+                        "Amplitude decreases more quickly",
+                        "Frequency increases",
+                        "The spring stops moving immediately"
+                    ],
+                    answer: 0,
+                    explanation: "Damping removes energy from the system, causing the amplitude to decrease over time while slightly affecting frequency."
+                },
+                {
+                    question: "What happens to the oscillation frequency if you cut a spring in half?",
+                    options: [
+                        "Frequency increases",
+                        "Frequency decreases",
+                        "Frequency remains the same"
+                    ],
+                    answer: 0,
+                    explanation: "A shorter spring is stiffer (higher spring constant), resulting in higher frequency (f ∝ √k)."
+                }
+            ],
+            collision: [
+                {
+                    question: "What does an elasticity value of 1.0 mean in collisions?",
+                    options: [
+                        "Perfectly inelastic collision",
+                        "Perfectly elastic collision",
+                        "Objects pass through each other"
+                    ],
+                    answer: 1,
+                    explanation: "An elasticity of 1 means a perfectly elastic collision where kinetic energy is conserved along with momentum."
+                },
+                {
+                    question: "What is conserved in elastic collisions?",
+                    options: [
+                        "Only momentum",
+                        "Only kinetic energy",
+                        "Both momentum and kinetic energy"
+                    ],
+                    answer: 2,
+                    explanation: "In elastic collisions, both momentum and kinetic energy are conserved before and after the collision."
+                },
+                {
+                    question: "What happens in a perfectly inelastic collision?",
+                    options: [
+                        "Objects bounce apart with no energy loss",
+                        "Objects stick together after collision",
+                        "Objects pass through each other"
+                    ],
+                    answer: 1,
+                    explanation: "In perfectly inelastic collisions, objects stick together and kinetic energy is not conserved (though momentum is)."
+                },
+                {
+                    question: "In a head-on elastic collision between equal masses, what happens if one is initially at rest?",
+                    options: [
+                        "The moving ball stops, the stationary one moves",
+                        "Both move together at half speed",
+                        "They bounce back with exchanged velocities"
+                    ],
+                    answer: 0,
+                    explanation: "In this special case, the moving ball transfers all its momentum to the stationary ball and comes to rest."
+                }
+            ],
+            projectile: [
+                {
+                    question: "At what launch angle does a projectile travel farthest?",
+                    options: [
+                        "30 degrees",
+                        "45 degrees",
+                        "60 degrees"
+                    ],
+                    answer: 1,
+                    explanation: "The maximum range is achieved at 45° when launch and landing heights are equal (neglecting air resistance)."
+                },
+                {
+                    question: "What is the shape of a projectile's path called?",
+                    options: [
+                        "Hyperbola",
+                        "Parabola",
+                        "Ellipse"
+                    ],
+                    answer: 1,
+                    explanation: "Under constant gravity and no air resistance, projectiles follow parabolic trajectories."
+                },
+                {
+                    question: "How does doubling the initial velocity affect the range?",
+                    options: [
+                        "Range doubles",
+                        "Range quadruples",
+                        "Range increases by factor of √2"
+                    ],
+                    answer: 1,
+                    explanation: "Range is proportional to the square of initial velocity (R ∝ v₀²), so doubling velocity quadruples the range."
+                },
+                {
+                    question: "What angle produces the same range as its complement (e.g., 30° and 60°)?",
+                    options: [
+                        "Only 45° has this property",
+                        "Any angle and its complement",
+                        "Only angles below 45°"
+                    ],
+                    answer: 1,
+                    explanation: "Complementary angles produce the same range (though different maximum heights and flight times)."
+                }
+            ],
+            general: [
+                {
+                    question: "What is the SI unit of force?",
+                    options: [
+                        "Joule",
+                        "Newton",
+                        "Watt"
+                    ],
+                    answer: 1,
+                    explanation: "The newton (N) is the SI unit of force, named after Sir Isaac Newton."
+                },
+                {
+                    question: "Which of these is a vector quantity?",
+                    options: [
+                        "Speed",
+                        "Mass",
+                        "Velocity"
+                    ],
+                    answer: 2,
+                    explanation: "Velocity is a vector (has magnitude and direction), while speed and mass are scalars (magnitude only)."
+                },
+                {
+                    question: "What does Newton's First Law describe?",
+                    options: [
+                        "F=ma",
+                        "Inertia",
+                        "Action-reaction pairs"
+                    ],
+                    answer: 1,
+                    explanation: "Newton's First Law describes inertia - objects in motion stay in motion unless acted upon by a net force."
+                },
+                {
+                    question: "What is the acceleration due to gravity on Earth's surface?",
+                    options: [
+                        "9.8 m/s²",
+                        "6.67 × 10⁻¹¹ N·m²/kg²",
+                        "3.00 × 10⁸ m/s"
+                    ],
+                    answer: 0,
+                    explanation: "Standard gravity on Earth is approximately 9.8 m/s² downward."
+                }
+            ]
+        };
+
+        const chemistryQuestions = {
+            water: [
+                {
+                    question: "What happens when water reacts with sodium metal?",
+                    options: [
+                        "Produces hydrogen gas and sodium hydroxide",
+                        "Forms a stable compound",
+                        "Creates sodium chloride and oxygen"
+                    ],
+                    answer: 0,
+                    explanation: "Sodium reacts vigorously with water: 2Na + 2H₂O → 2NaOH + H₂↑ (hydrogen gas)."
+                },
+                {
+                    question: "What is the pH of pure water at 25°C?",
+                    options: [
+                        "5",
+                        "7",
+                        "9"
+                    ],
+                    answer: 1,
+                    explanation: "Pure water at 25°C has pH 7 (neutral) due to equal concentrations of H⁺ and OH⁻ ions."
+                },
+                {
+                    question: "What property allows water to dissolve many substances?",
+                    options: [
+                        "Its polarity",
+                        "Its high density",
+                        "Its low boiling point"
+                    ],
+                    answer: 0,
+                    explanation: "Water's polarity makes it an excellent solvent for ionic and polar substances."
+                },
+                {
+                    question: "Why does ice float on water?",
+                    options: [
+                        "Ice is less dense than liquid water",
+                        "Ice is more dense than liquid water",
+                        "Ice has lower surface tension"
+                    ],
+                    answer: 0,
+                    explanation: "Water expands when freezing, making ice less dense than liquid water - a rare property among liquids."
+                }
+            ],
+            hcl: [
+                {
+                    question: "What happens when you mix HCl with NaOH?",
+                    options: [
+                        "They explode violently",
+                        "They neutralize forming salt and water",
+                        "They create a colorful precipitate"
+                    ],
+                    answer: 1,
+                    explanation: "HCl + NaOH → NaCl + H₂O is a classic neutralization reaction producing salt and water."
+                },
+                {
+                    question: "What gas is produced when HCl reacts with most metals?",
+                    options: [
+                        "Oxygen",
+                        "Hydrogen",
+                        "Carbon dioxide"
+                    ],
+                    answer: 1,
+                    explanation: "Acids react with metals to produce hydrogen gas (e.g., Zn + 2HCl → ZnCl₂ + H₂↑)."
+                },
+                {
+                    question: "What is the pH range of hydrochloric acid?",
+                    options: [
+                        "0-2",
+                        "4-6",
+                        "8-10"
+                    ],
+                    answer: 0,
+                    explanation: "HCl is a strong acid with pH typically between 0-2 depending on concentration."
+                },
+                {
+                    question: "What happens when HCl is added to limestone (calcium carbonate)?",
+                    options: [
+                        "It produces carbon dioxide gas",
+                        "It creates a blue solution",
+                        "Nothing happens"
+                    ],
+                    answer: 0,
+                    explanation: "2HCl + CaCO₃ → CaCl₂ + H₂O + CO₂↑ - this reaction produces CO₂ bubbles."
+                }
+            ],
+            naoh: [
+                {
+                    question: "What is the common name for sodium hydroxide?",
+                    options: [
+                        "Baking soda",
+                        "Lye",
+                        "Table salt"
+                    ],
+                    answer: 1,
+                    explanation: "Sodium hydroxide is commonly called lye or caustic soda."
+                },
+                {
+                    question: "What color does phenolphthalein turn in NaOH solution?",
+                    options: [
+                        "Red",
+                        "Green",
+                        "Pink"
+                    ],
+                    answer: 2,
+                    explanation: "Phenolphthalein turns pink in basic solutions like NaOH (pH > 8.3)."
+                },
+                {
+                    question: "What is the main industrial use of NaOH?",
+                    options: [
+                        "Making soap",
+                        "Fertilizer production",
+                        "Fuel additive"
+                    ],
+                    answer: 0,
+                    explanation: "NaOH is primarily used in soap making through saponification of fats/oils."
+                },
+                {
+                    question: "What happens when NaOH reacts with aluminum?",
+                    options: [
+                        "Produces hydrogen gas",
+                        "Forms a protective layer",
+                        "Nothing happens"
+                    ],
+                    answer: 0,
+                    explanation: "2Al + 2NaOH + 2H₂O → 2NaAlO₂ + 3H₂↑ - aluminum reacts with strong bases."
+                }
+            ],
+            phenolphthalein: [
+                {
+                    question: "What color does phenolphthalein turn in basic solution?",
+                    options: [
+                        "Red",
+                        "Green",
+                        "Pink"
+                    ],
+                    answer: 2,
+                    explanation: "Phenolphthalein is colorless in acid but turns pink in basic solutions (pH 8.3-10)."
+                },
+                {
+                    question: "What is phenolphthalein's color in neutral solution?",
+                    options: [
+                        "Colorless",
+                        "Pink",
+                        "Yellow"
+                    ],
+                    answer: 0,
+                    explanation: "At neutral pH (around 7), phenolphthalein is colorless (transition occurs around pH 8.3)."
+                },
+                {
+                    question: "At what approximate pH does phenolphthalein change color?",
+                    options: [
+                        "2-3",
+                        "7-8",
+                        "8-10"
+                    ],
+                    answer: 2,
+                    explanation: "Phenolphthalein changes from colorless to pink between pH 8.3-10."
+                },
+                {
+                    question: "What is phenolphthalein primarily used for?",
+                    options: [
+                        "Measuring temperature",
+                        "Acid-base titrations",
+                        "Density measurements"
+                    ],
+                    answer: 1,
+                    explanation: "Phenolphthalein is commonly used as a pH indicator in acid-base titrations."
+                }
+            ],
+            cuso4: [
+                {
+                    question: "What happens when you heat copper sulfate solution?",
+                    options: [
+                        "It turns into a gas",
+                        "Water evaporates leaving blue crystals",
+                        "It becomes explosive"
+                    ],
+                    answer: 1,
+                    explanation: "Heating evaporates water, leaving blue CuSO₄·5H₂O crystals (copper sulfate pentahydrate)."
+                },
+                {
+                    question: "What happens when iron is added to copper sulfate solution?",
+                    options: [
+                        "Iron dissolves and copper deposits",
+                        "Nothing happens",
+                        "The solution turns red"
+                    ],
+                    answer: 0,
+                    explanation: "Fe + CuSO₄ → FeSO₄ + Cu - iron is more reactive so displaces copper from solution."
+                },
+                {
+                    question: "What is the common name for copper sulfate pentahydrate?",
+                    options: [
+                        "Blue vitriol",
+                        "Epsom salt",
+                        "Table salt"
+                    ],
+                    answer: 0,
+                    explanation: "CuSO₄·5H₂O is called blue vitriol due to its blue crystalline form."
+                },
+                {
+                    question: "What happens when NaOH is added to copper sulfate solution?",
+                    options: [
+                        "Forms a blue precipitate",
+                        "Produces a red gas",
+                        "Creates a clear solution"
+                    ],
+                    answer: 0,
+                    explanation: "2NaOH + CuSO₄ → Cu(OH)₂↓ (blue precipitate) + Na₂SO₄."
+                }
+            ]
+        };
+
+        // Quiz variables
+        let currentSubject = '';
+        let currentQuestions = [];
+        let currentQuestionIndex = 0;
+        let userAnswers = [];
+        let score = 0;
+        
+        // DOM elements
+        const mainMenu = document.getElementById('mainMenu');
+        const quizContainer = document.getElementById('quizContainer');
+        const quizSubject = document.getElementById('quizSubject');
+        const quizTopic = document.getElementById('quizTopic');
+        const questionNumber = document.getElementById('questionNumber');
+        const questionText = document.getElementById('questionText');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const progressBar = document.getElementById('progressBar');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const questionScreen = document.getElementById('questionScreen');
+        const resultsScreen = document.getElementById('resultsScreen');
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const badgeEarned = document.getElementById('badgeEarned');
+        const badgeIcon = document.getElementById('badgeIcon');
+        const badgeTitle = document.getElementById('badgeTitle');
+        const badgeDesc = document.getElementById('badgeDesc');
+        const seeAnswersBtn = document.getElementById('seeAnswersBtn');
+        const restartQuizBtn = document.getElementById('restartQuizBtn');
+        const homeBtn = document.getElementById('homeBtn');
+        const answersReview = document.getElementById('answersReview');
+        
+        // Event listeners
+        document.getElementById('physicsBtn').addEventListener('click', () => startQuiz('physics'));
+        document.getElementById('chemistryBtn').addEventListener('click', () => startQuiz('chemistry'));
+        prevBtn.addEventListener('click', goToPreviousQuestion);
+        nextBtn.addEventListener('click', goToNextQuestion);
+        submitBtn.addEventListener('click', submitQuiz);
+        seeAnswersBtn.addEventListener('click', toggleAnswers);
+        restartQuizBtn.addEventListener('click', restartQuiz);
+        homeBtn.addEventListener('click', goToHome);
+        
+        // Start quiz function
+        function startQuiz(subject) {
+            currentSubject = subject;
+            userAnswers = [];
+            score = 0;
+            currentQuestionIndex = 0;
+            
+            // Select questions - at least 2 from each topic
+            const allQuestions = subject === 'physics' ? physicsQuestions : chemistryQuestions;
+            currentQuestions = [];
+            
+            // Get 2 questions from each topic (randomly selected)
+            for (const topic in allQuestions) {
+                const shuffled = [...allQuestions[topic]].sort(() => 0.5 - Math.random());
+                currentQuestions.push(...shuffled.slice(0, 2));
+            }
+            
+            // Shuffle all selected questions
+            currentQuestions = currentQuestions.sort(() => 0.5 - Math.random());
+            
+            // Update UI
+            quizSubject.textContent = subject === 'physics' ? 'Physics Quiz' : 'Chemistry Quiz';
+            quizTopic.textContent = subject === 'physics' ? 'Test your physics knowledge!' : 'Explore chemical reactions!';
+            mainMenu.style.display = 'none';
+            quizContainer.style.display = 'block';
+            questionScreen.style.display = 'block';
+            resultsScreen.style.display = 'none';
+            answersReview.style.display = 'none';
+            
+            displayQuestion();
+        }
+        
+        // Display current question
+        function displayQuestion() {
+            const question = currentQuestions[currentQuestionIndex];
+            
+            questionNumber.textContent = `Question ${currentQuestionIndex + 1} of ${currentQuestions.length}`;
+            questionText.textContent = question.question;
+            
+            // Update progress bar
+            const progress = ((currentQuestionIndex + 1) / currentQuestions.length) * 100;
+            progressBar.style.width = `${progress}%`;
+            
+            // Clear previous options
+            optionsContainer.innerHTML = '';
+            
+            // Add new options
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.classList.add('option');
+                
+                // Check if this option was previously selected
+                if (userAnswers[currentQuestionIndex] !== undefined && 
+                    userAnswers[currentQuestionIndex] === index) {
+                    optionElement.classList.add('selected');
+                }
+                
+                optionElement.textContent = option;
+                optionElement.addEventListener('click', () => selectOption(index));
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            // Update navigation buttons
+            prevBtn.disabled = currentQuestionIndex === 0;
+            
+            if (currentQuestionIndex === currentQuestions.length - 1) {
+                nextBtn.style.display = 'none';
+                submitBtn.style.display = 'block';
+            } else {
+                nextBtn.style.display = 'block';
+                submitBtn.style.display = 'none';
+            }
+        }
+        
+        // Select option
+        function selectOption(optionIndex) {
+            // Remove selected class from all options
+            const options = document.querySelectorAll('.option');
+            options.forEach(option => option.classList.remove('selected'));
+            
+            // Add selected class to clicked option
+            options[optionIndex].classList.add('selected');
+            
+            // Store user's answer
+            userAnswers[currentQuestionIndex] = optionIndex;
+        }
+        
+        // Navigation functions
+        function goToPreviousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion();
+            }
+        }
+        
+        function goToNextQuestion() {
+            if (userAnswers[currentQuestionIndex] === undefined) {
+                alert('Please select an answer before proceeding!');
+                return;
+            }
+            
+            if (currentQuestionIndex < currentQuestions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            }
+        }
+        
+        // Submit quiz
+        function submitQuiz() {
+            if (userAnswers[currentQuestionIndex] === undefined) {
+                alert('Please select an answer before submitting!');
+                return;
+            }
+            
+            // Calculate score
+            score = 0;
+            for (let i = 0; i < currentQuestions.length; i++) {
+                if (userAnswers[i] === currentQuestions[i].answer) {
+                    score++;
+                }
+            }
+            
+            // Show results
+            showResults();
+        }
+        
+        // Show results
+        function showResults() {
+            questionScreen.style.display = 'none';
+            resultsScreen.style.display = 'block';
+            answersReview.style.display = 'none';
+            
+            scoreDisplay.textContent = `Your Score: ${score}/${currentQuestions.length}`;
+            
+            // Determine badge
+            const percentage = (score / currentQuestions.length) * 100;
+            
+            if (currentSubject === 'physics') {
+                badgeIcon.innerHTML = '<i class="fas fa-rocket"></i>';
+                
+                if (percentage >= 90) {
+                    badgeTitle.textContent = 'Astronaut Badge';
+                    badgeDesc.textContent = 'You\'ve reached for the stars and grasped physics mastery!';
+                } else if (percentage >= 70) {
+                    badgeTitle.textContent = 'Space Explorer';
+                    badgeDesc.textContent = 'You\'re navigating the physics universe with skill!';
+                } else {
+                    badgeTitle.textContent = 'Rookie Astronaut';
+                    badgeDesc.textContent = 'Keep exploring the physics universe!';
+                    badgeEarned.style.opacity = '0.7';
+                }
+            } else {
+                badgeIcon.innerHTML = '<i class="fas fa-hat-wizard"></i>';
+                
+                if (percentage >= 90) {
+                    badgeTitle.textContent = 'Master Alchemist';
+                    badgeDesc.textContent = 'You\'ve brewed up perfect chemistry knowledge!';
+                } else if (percentage >= 70) {
+                    badgeTitle.textContent = 'Potion Expert';
+                    badgeDesc.textContent = 'Your chemistry skills are truly magical!';
+                } else {
+                    badgeTitle.textContent = 'Apprentice Wizard';
+                    badgeDesc.textContent = 'Keep practicing your chemistry spells!';
+                    badgeEarned.style.opacity = '0.7';
+                }
+            }
+            
+            // Confetti effect for good scores
+            if (percentage >= 70) {
+                const confettiSettings = { 
+                    target: 'badgeEarned',
+                    max: 80,
+                    size: 1.2,
+                    animate: true,
+                    colors: currentSubject === 'physics' 
+                        ? [[30, 144, 255], [0, 191, 255], [135, 206, 250]] 
+                        : [[138, 43, 226], [147, 112, 219], [216, 191, 216]],
+                    props: currentSubject === 'physics' 
+                        ? ['circle', 'square'] 
+                        : ['circle', 'square', 'triangle', 'line']
+                };
+                
+                const confetti = new ConfettiGenerator(confettiSettings);
+                confetti.render();
+                setTimeout(() => confetti.clear(), 3000);
+            }
+        }
+        
+        // Toggle answers visibility
+        function toggleAnswers() {
+            if (answersReview.style.display === 'block') {
+                answersReview.style.display = 'none';
+                seeAnswersBtn.innerHTML = '<i class="fas fa-eye"></i> See Answers';
+            } else {
+                showAnswers();
+                seeAnswersBtn.innerHTML = '<i class="fas fa-eye-slash"></i> Hide Answers';
+            }
+        }
+        
+        // Show answers
+        function showAnswers() {
+            answersReview.innerHTML = '';
+            
+            currentQuestions.forEach((question, index) => {
+                const answerItem = document.createElement('div');
+                answerItem.classList.add('answer-item');
+                
+                const questionElement = document.createElement('div');
+                questionElement.classList.add('answer-question');
+                questionElement.textContent = `${index + 1}. ${question.question}`;
+                
+                const correctElement = document.createElement('div');
+                correctElement.classList.add('answer-correct');
+                correctElement.textContent = `✓ ${question.options[question.answer]}`;
+                
+                if (question.explanation) {
+                    const explanationElement = document.createElement('div');
+                    explanationElement.classList.add('answer-correct');
+                    explanationElement.style.fontStyle = 'italic';
+                    explanationElement.style.opacity = '0.8';
+                    explanationElement.textContent = `💡 ${question.explanation}`;
+                    correctElement.appendChild(explanationElement);
+                }
+                
+                const userElement = document.createElement('div');
+                userElement.classList.add('answer-user');
+                
+                if (userAnswers[index] !== undefined) {
+                    userElement.textContent = `Your answer: ${question.options[userAnswers[index]]}`;
+                    
+                    if (userAnswers[index] === question.answer) {
+                        userElement.innerHTML += ' <i class="fas fa-check" style="color:lightgreen"></i>';
+                    } else {
+                        userElement.innerHTML += ' <i class="fas fa-times" style="color:red"></i>';
+                    }
+                } else {
+                    userElement.textContent = 'You didn\'t answer this question';
+                    userElement.innerHTML += ' <i class="fas fa-question" style="color:yellow"></i>';
+                }
+                
+                answerItem.appendChild(questionElement);
+                answerItem.appendChild(userElement);
+                answerItem.appendChild(correctElement);
+                answersReview.appendChild(answerItem);
+            });
+            
+            answersReview.style.display = 'block';
+        }
+        
+        // Restart quiz
+        function restartQuiz() {
+            startQuiz(currentSubject);
+        }
+        
+        // Go back to home
+        function goToHome() {
+            mainMenu.style.display = 'block';
+            quizContainer.style.display = 'none';
+            // Reset animation
+            mainMenu.style.animation = 'none';
+            void mainMenu.offsetWidth; // Trigger reflow
+            mainMenu.style.animation = 'fadeIn 1s';
+        }
+        
+        // Add confetti library for celebration effects
+        const confettiScript = document.createElement('script');
+        confettiScript.src = 'https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js';
+        document.head.appendChild(confettiScript);
+    </script>
+</body>
+</html>
