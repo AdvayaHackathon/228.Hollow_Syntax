@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magical Potion Lab</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
+        
+        :root {
+            --primary: #9c27b0;
+            --secondary: #673ab7;
+            --accent: #ff5722;
+            --light: #f3e5f5;
+            --dark: #4a148c;
+            --success: #4caf50;
+            --warning: #ffc107;
+            --danger: #f44336;
+            --magic-purple: #7b1fa2;
+            --magic-blue: #1976d2;
+            --magic-pink: #e91e63;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #0a0612;
+            color: #f8f8f8;
+            background-image: url('https://www.transparenttextures.com/patterns/dark-mosaic.png');
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--magic-purple), var(--dark));
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(156, 39, 176, 0.3);
+            margin-bottom: 30px;
+            position: relative;
+            border-bottom: 2px solid var(--accent);
+        }
+        
+        header h1 {
+            margin: 0;
+            font-weight: 500;
+            font-size: 2.2rem;
+            font-family: 'MedievalSharp', cursive;
+            text-shadow: 0 0 10px rgba(156, 39, 176, 0.7);
+        }
+        
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            padding-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px 0;
+            color: rgba(230, 241, 255, 0.6);
+            font-size: 14px;
+            border-top: 1px solid rgba(79, 195, 247, 0.2);
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            margin: 0 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .lab-area {
+            display: flex;
+            margin-top: 20px;
+            gap: 20px;
+        }
+        
+        .equipment-panel {
+            width: 25%;
+            background-color: rgba(30, 10, 50, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 15px rgba(156, 39, 176, 0.3);
+            border: 1px solid var(--magic-purple);
+            backdrop-filter: blur(5px);
+        }
+        
+        .equipment-panel h3 {
+            margin-top: 0;
+            color: var(--light);
+            border-bottom: 2px solid var(--magic-purple);
+            padding-bottom: 10px;
+            font-family: 'MedievalSharp', cursive;
+        }
+        
+        .workbench {
+            width: 75%;
+            background-color: rgba(20, 5, 40, 0.7);
+            height: 550px;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 2px 20px rgba(156, 39, 176, 0.3);
+            border: 1px solid var(--magic-purple);
+            backdrop-filter: blur(3px);
+        }
+        
+        .equipment-item {
+            background-color: rgba(74, 20, 140, 0.5);
+            margin-bottom: 12px;
+            padding: 12px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--accent);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            color: var(--light);
+        }
+        
+        .equipment-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(156, 39, 176, 0.4);
+            background-color: rgba(156, 39, 176, 0.3);
+        }
+        
+        .equipment-item::before {
+            content: "✨";
+            margin-right: 10px;
+            font-weight: bold;
+            color: var(--accent);
+        }
+        
+        .chemical-shelf {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 30px;
+            padding: 20px;
+            background-color: rgba(30, 10, 50, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 2px 15px rgba(156, 39, 176, 0.3);
+            border: 1px solid var(--magic-purple);
+        }
+        
+        .chemical-shelf h3 {
+            width: 100%;
+            margin-top: 0;
+            color: var(--light);
+            border-bottom: 2px solid var(--magic-purple);
+            padding-bottom: 10px;
+            font-family: 'MedievalSharp', cursive;
+        }
+        
+        .chemical {
+            width: 80px;
+            height: 100px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            font-size: 12px;
+            text-align: center;
+            transition: all 0.3s ease;
+            background-color: rgba(74, 20, 140, 0.5);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            color: var(--light);
+            overflow: hidden;
+        }
+        
+        .chemical:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(156, 39, 176, 0.4);
+        }
+        
+        .chemical::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(156, 39, 176, 0.3), transparent);
+            z-index: -1;
+        }
+        
+        .chemical-container {
+            width: 50px;
+            height: 70px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-end;
+            overflow: hidden;
+            border: 2px solid var(--magic-purple);
+            background-color: rgba(0, 0, 0, 0.3);
+            box-shadow: inset 0 0 15px rgba(156, 39, 176, 0.3);
+            position: relative;
+        }
+        
+        .chemical-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 10px;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.2), transparent);
+            z-index: 1;
+        }
+        
+        .chemical-liquid {
+            width: 100%;
+            height: 70%;
+            transition: all 0.5s ease;
+            position: relative;
+            z-index: 0;
+        }
+        
+        /* Magical Equipment Styles */
+        .beaker {
+            position: absolute;
+            width: 90px;
+            height: 120px;
+            background-color: rgba(255, 255, 255, 0.15);
+            border: 2px solid var(--magic-purple);
+            border-radius: 8px 8px 0 0;
+            cursor: move;
+            display: flex;
+            align-items: flex-end;
+            box-shadow: 0 4px 15px rgba(156, 39, 176, 0.4);
+            transition: all 0.3s ease;
+            z-index: 10;
+            left: 50px;
+            top: 50px;
+        }
+        
+        .beaker::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 15px;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.3), transparent);
+            border-radius: 6px 6px 0 0;
+        }
+        
+        .beaker::after {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background-color: rgba(156, 39, 176, 0.3);
+            border-radius: 0 0 8px 8px;
+        }
+        
+        .beaker-liquid {
+            width: 100%;
+            height: 0%;
+            transition: all 0.5s ease;
+            background-color: transparent;
+            border-radius: 0 0 6px 6px;
+            position: relative;
+        }
+        
+        .beaker-liquid::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 10px;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.2), transparent);
+        }
+        
+        .test-tube {
+            position: absolute;
+            width: 40px;
+            height: 140px;
+            background-color: rgba(255, 255, 255, 0.15);
+            border: 2px solid var(--magic-purple);
+            border-radius: 0 0 20px 20px;
+            cursor: move;
+            display: flex;
+            align-items: flex-end;
+            box-shadow: 0 4px 15px rgba(156, 39, 176, 0.4);
+            transition: all 0.3s ease;
+            z-index: 10;
+            left: 150px;
+            top: 50px;
+        }
+        
+        .test-tube::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 15px;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.3), transparent);
+        }
+        
+        .test-tube::after {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background-color: rgba(156, 39, 176, 0.3);
+            border-radius: 0 0 20px 20px;
+        }
+        
+        .test-tube-liquid {
+            width: 100%;
+            height: 0%;
+            transition: all 0.5s ease;
+            background-color: transparent;
+            border-radius: 0 0 18px 18px;
+        }
+        
+        .test-tube-liquid::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 10px;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.2), transparent);
+        }
+        
+        .flask {
+            position: absolute;
+            width: 110px;
+            height: 150px;
+            cursor: move;
+            z-index: 10;
+            left: 250px;
+            top: 50px;
+        }
+        
+        .flask-top {
+            width: 50px;
+            height: 50px;
+            background-color: rgba(255, 255, 255, 0.15);
+            border: 2px solid var(--magic-purple);
+            border-radius: 8px 8px 0 0;
+            margin: 0 auto;
+            box-shadow: 0 2px 10px rgba(156, 39, 176, 0.3);
+        }
+        
+        .flask-top::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 15px;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.3), transparent);
+            border-radius: 6px 6px 0 0;
+        }
+        
+        .flask-bottom {
+            width: 110px;
+            height: 100px;
+            background-color: rgba(255, 255, 255, 0.15);
+            border: 2px solid var(--magic-purple);
+            border-radius: 0 0 60px 60px;
+            display: flex;
+            align-items: flex-end;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(156, 39, 176, 0.4);
+        }
+        
+        .flask-bottom::after {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background-color: rgba(156, 39, 176, 0.3);
+            border-radius: 0 0 60px 60px;
+        }
+        
+        .flask-liquid {
+            width: 100%;
+            height: 0%;
+            transition: all 0.5s ease;
+            background-color: transparent;
+            border-radius: 0 0 58px 58px;
+        }
+        
+        .flask-liquid::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 15px;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.2), transparent);
+        }
+        
+        .bunsen-burner {
+            position: absolute;
+            width: 90px;
+            height: 140px;
+            cursor: move;
+            z-index: 5;
+            left: 350px;
+            top: 300px;
+        }
+        
+        .burner-base {
+            width: 90px;
+            height: 25px;
+            background: linear-gradient(to bottom, #3d566e, #2c3e50);
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .burner-tube {
+            width: 25px;
+            height: 90px;
+            background: linear-gradient(to right, #95a5a6, #bdc3c7, #95a5a6);
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .burner-tube::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 15px;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.3), transparent);
+        }
+        
+        .burner-head {
+            width: 50px;
+            height: 15px;
+            background: linear-gradient(to bottom, #3d566e, #2c3e50);
+            margin: 0 auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .flame {
+            width: 40px;
+            height: 0;
+            background: linear-gradient(to top, #ff0000, #ff6600, #ffcc00);
+            margin: 0 auto;
+            border-radius: 50% 50% 20% 20%;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            opacity: 0;
+            filter: blur(5px);
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 0 20px #ff6600;
+        }
+        
+        .burner-on .flame {
+            height: 70px;
+            opacity: 0.9;
+            animation: flicker 0.5s infinite alternate;
+        }
+        
+        @keyframes flicker {
+            0%, 100% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.05); opacity: 1; }
+        }
+        
+        .bubbles {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 30%;
+            background: radial-gradient(circle, rgba(255,255,255,0.7) 10%, transparent 10%) 0 0, 
+                        radial-gradient(circle, rgba(255,255,255,0.7) 10%, transparent 10%) 15px 15px;
+            background-size: 30px 30px;
+            animation: bubble 1.5s linear infinite;
+            z-index: 2;
+        }
+        
+        @keyframes bubble {
+            0% { background-position: 0 0, 15px 15px; }
+            100% { background-position: 30px 30px, 45px 45px; }
+        }
+        
+        .magic-bubbles {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(156, 39, 176, 0.7) 10%, transparent 10%) 0 0, 
+                        radial-gradient(circle, rgba(233, 30, 99, 0.7) 10%, transparent 10%) 15px 15px;
+            background-size: 40px 40px;
+            animation: magicBubble 2s linear infinite;
+            z-index: 2;
+        }
+        
+        @keyframes magicBubble {
+            0% { background-position: 0 0, 20px 20px; }
+            100% { background-position: 40px 40px, 60px 60px; }
+        }
+        
+        .reset-btn {
+            margin-top: 20px;
+            padding: 12px 20px;
+            background: linear-gradient(to bottom, var(--danger), #c2185b);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(244, 67, 54, 0.3);
+            width: 100%;
+            font-family: 'MedievalSharp', cursive;
+        }
+        
+        .reset-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(244, 67, 54, 0.4);
+            background: linear-gradient(to bottom, #e53935, #c2185b);
+        }
+        
+        .instructions {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: rgba(30, 10, 50, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 2px 15px rgba(156, 39, 176, 0.3);
+            border: 1px solid var(--magic-purple);
+            color: var(--light);
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: var(--light);
+            border-bottom: 2px solid var(--magic-purple);
+            padding-bottom: 10px;
+            font-family: 'MedievalSharp', cursive;
+        }
+        
+        .instructions p, .instructions li {
+            line-height: 1.6;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+        }
+        
+        .reaction-info {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: var(--magic-purple);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            max-width: 350px;
+            display: none;
+            box-shadow: 0 5px 20px rgba(156, 39, 176, 0.5);
+            z-index: 100;
+            animation: slideIn 0.3s ease-out;
+            border: 1px solid var(--accent);
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .tooltip {
+            position: absolute;
+            background-color: rgba(74, 20, 140, 0.9);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-size: 13px;
+            pointer-events: none;
+            z-index: 1000;
+            display: none;
+            box-shadow: 0 2px 15px rgba(156, 39, 176, 0.4);
+            border: 1px solid var(--accent);
+        }
+        
+        .selected {
+            box-shadow: 0 0 0 3px var(--accent), 0 0 30px rgba(255, 87, 34, 0.6);
+            transform: scale(1.02);
+            z-index: 20;
+        }
+        
+        .workbench-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(to right, rgba(156, 39, 176, 0.1) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(156, 39, 176, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            pointer-events: none;
+        }
+        
+        .equipment-label {
+            position: absolute;
+            bottom: -20px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 11px;
+            color: var(--light);
+            font-weight: 500;
+        }
+        
+        /* Floating potions background */
+        .floating-potions {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .floating-potion {
+            position: absolute;
+            width: 80px;
+            opacity: 0.7;
+            animation: floatPotion 8s ease-in-out infinite;
+            filter: drop-shadow(0 0 10px rgba(156, 39, 176, 0.7));
+        }
+        
+        @keyframes floatPotion {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(5deg); }
+            100% { transform: translateY(0px) rotate(-5deg); }
+        }
+        
+
+        .magic-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(156, 39, 176, 0.2), transparent 60%);
+            pointer-events: none;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="magic-glow"></div>
+    <div class="floating-potions">
+        <img src=".\assets\images\p1.png" class="floating-potion" style="top: 10%; left: 5%; animation-delay: 0s;">
+        <img src=".\assets\images\p2.png" class="floating-potion" style="top: 50%; left: 90%; animation-delay: 2s;">
+        <img src=".\assets\images\p3.png" class="floating-potion" style="top: 80%; left: 2%; animation-delay: 4s;">
+        <img src=".\assets\images\p4.png" class="floating-potion" style="top: 30%; left: 70%; animation-delay: 6s;">
+        <img src=".\assets\images\wizboy.png" class="floating-potion" style="top: 10%; left: 90%; animation-delay: 2s;">
+        <img src=".\assets\images\dragon.png" class="floating-potion" style="top: 10%; left: 30%; animation-delay: 2s;">
+
+    </div>
+    
+    <header>
+        <div class="hero-buttons">
+            <a href="front.html" class="btn"><i class="fas fa-atom"></i>Home</a>
+            <a href="quiz.html" class="btn"><i class="fas fa-atom"></i>Quiz</a>
+        </div>
+        <div class="container">
+            <h1>Magical Potion Lab</h1>
+            <p>Interactive simulations for exploring alchemical reactions</p>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="lab-area">
+            <div class="equipment-panel">
+                <h3>Alchemical Equipment</h3>
+                <div class="equipment-item" data-type="beaker">Crystal Beaker (250ml)</div>
+                <div class="equipment-item" data-type="test-tube">Enchanted Tube</div>
+                <div class="equipment-item" data-type="flask">Mystic Flask</div>
+                <div class="equipment-item" data-type="bunsen-burner">Dragonfire Burner</div>
+                <button class="reset-btn">Reset Cauldron</button>
+            </div>
+            
+            <div class="workbench" id="workbench">
+                <div class="workbench-grid"></div>
+            </div>
+        </div>
+        
+        <div class="chemical-shelf">
+            <h3>Magical Ingredients</h3>
+            <div class="chemical" data-chemical="water">
+                <div class="chemical-container">
+                    <div class="chemical-liquid" style="background-color: #64b5f6;"></div>
+                </div>
+                <span>Moonwater (H₂O)</span>
+            </div>
+            <div class="chemical" data-chemical="acid">
+                <div class="chemical-container">
+                    <div class="chemical-liquid" style="background-color: #fff176;"></div>
+                </div>
+                <span>Dragon's Bile (HCl)</span>
+            </div>
+            <div class="chemical" data-chemical="base">
+                <div class="chemical-container">
+                    <div class="chemical-liquid" style="background-color: #ba68c8;"></div>
+                </div>
+                <span>Phoenix Ash (NaOH)</span>
+            </div>
+            <div class="chemical" data-chemical="indicator">
+                <div class="chemical-container">
+                    <div class="chemical-liquid" style="background-color: #ff8a65;"></div>
+                </div>
+                <span>Fairy Dust (Phenaptholene)</span>
+            </div>
+            <div class="chemical" data-chemical="salt">
+                <div class="chemical-container">
+                    <div class="chemical-liquid" style="background-color: #e0e0e0;"></div>
+                </div>
+                <span>Mermaid Tears (NaCl)</span>
+            </div>
+            <div class="chemical" data-chemical="copper-sulfate">
+                <div class="chemical-container">
+                    <div class="chemical-liquid" style="background-color: #4fc3f7;"></div>
+                </div>
+                <span>Blue Dragon Scale (CuSO₄)</span>
+            </div>
+            <div class="chemical" data-chemical="iron-powder">
+                <div class="chemical-container">
+                    <div class="chemical-liquid" style="background-color: #a1887f;"></div>
+                </div>
+                <span>Goblin Iron (Fe)</span>
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <h3>Spellbook Instructions</h3>
+            <p>1. Select alchemical equipment from the panel to add to your cauldron</p>
+            <p>2. Drag equipment to position it in your workspace</p>
+            <p>3. Click on magical ingredients to add them to your selected vessel</p>
+            <p>4. Turn on the Dragonfire burner by clicking on it</p>
+            <p>5. Experiment with different magical combinations</p>
+            <p><strong>Try These Enchantments:</strong></p>
+            <ul>
+                <li><strong>Neutralization Spell:</strong> Mix Dragon's Bile and Phoenix Ash with Fairy Dust</li>
+                <li><strong>Dissolution Charm:</strong> Add Mermaid Tears to Moonwater</li>
+                <li><strong>Heat Incantation:</strong> Use Dragonfire with various solutions</li>
+                <li><strong>Precipitation Magic:</strong> Mix Blue Dragon Scale with Phoenix Ash</li>
+                <li><strong>Transmutation:</strong> Observe Goblin Iron in different solutions</li>
+            </ul>
+        </div>
+        
+        <div class="reaction-info" id="reaction-info"></div>
+        <div class="tooltip" id="tooltip"></div>
+    </div>
+    <audio id = "burner-sound" src = "burn.wav" preload = "auto"></audio>
+
+    <footer class="footer">
+        <div class="container">
+            <p>Space Physics Lab &copy; 2023 | Interactive Physics Simulations for Space Exploration</p>
+        </div>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const workbench = document.getElementById('workbench');
+            const equipmentItems = document.querySelectorAll('.equipment-item');
+            const chemicalItems = document.querySelectorAll('.chemical');
+            const resetBtn = document.querySelector('.reset-btn');
+            const reactionInfo = document.getElementById('reaction-info');
+            const burnerSound = document.getElementById('burner-sound');
+            const tooltip = document.getElementById('tooltip');
+            
+            let selectedContainer = null;
+            let draggedElement = null;
+            let offset = { x: 0, y: 0 };
+            let equipmentCounter = 0;
+            
+            // Equipment creation
+            equipmentItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const type = this.getAttribute('data-type');
+                    createEquipment(type);
+                });
+            });
+            
+            function createEquipment(type) {
+                equipmentCounter++;
+                const id = `${type}-${equipmentCounter}`;
+                let equipment;
+                
+                switch(type) {
+                    case 'beaker':
+                        equipment = document.createElement('div');
+                        equipment.className = 'beaker';
+                        equipment.id = id;
+                        equipment.innerHTML = `
+                            <div class="beaker-liquid" id="${id}-liquid"></div>
+                            <div class="equipment-label">Crystal Beaker</div>
+                        `;
+                        // Set initial position
+                        equipment.style.left = '50px';
+                        equipment.style.top = '50px';
+                        break;
+                    case 'test-tube':
+                        equipment = document.createElement('div');
+                        equipment.className = 'test-tube';
+                        equipment.id = id;
+                        equipment.innerHTML = `
+                            <div class="test-tube-liquid" id="${id}-liquid"></div>
+                            <div class="equipment-label">Enchanted Tube</div>
+                        `;
+                        // Set initial position
+                        equipment.style.left = '150px';
+                        equipment.style.top = '50px';
+                        break;
+                    case 'flask':
+                        equipment = document.createElement('div');
+                        equipment.className = 'flask';
+                        equipment.id = id;
+                        equipment.innerHTML = `
+                            <div class="flask-top"></div>
+                            <div class="flask-bottom">
+                                <div class="flask-liquid" id="${id}-liquid"></div>
+                            </div>
+                            <div class="equipment-label">Mystic Flask</div>
+                        `;
+                        // Set initial position
+                        equipment.style.left = '250px';
+                        equipment.style.top = '50px';
+                        break;
+                    case 'bunsen-burner':
+                        equipment = document.createElement('div');
+                        equipment.className = 'bunsen-burner';
+                        equipment.id = id;
+                        equipment.innerHTML = `
+                            <div class="flame"></div>
+                            <div class="burner-head"></div>
+                            <div class="burner-tube"></div>
+                            <div class="burner-base"></div>
+                            <div class="equipment-label">Dragonfire Burner</div>
+                        `;
+                        // Set initial position
+                        equipment.style.left = '350px';
+                        equipment.style.top = '300px';
+                        
+                        equipment.addEventListener('click', function(e) {
+                            // Don't toggle if we're dragging
+                            if (draggedElement === this) return;
+                            
+                            if (this.classList.contains('burner-on')) {
+                                burnerSound.pause();
+                                burnerSound.currentTime = 0;
+                            } else {
+                                burnerSound.play();
+                            }
+                            
+                            this.classList.toggle('burner-on');
+                            heatNearbyContainers(this);
+                            e.stopPropagation();
+                        });
+                        break;
+                }
+                
+                equipment.setAttribute('data-contents', '[]');
+                
+                // Add drag functionality
+                equipment.addEventListener('mousedown', function(e) {
+                    // Only left mouse button
+                    if (e.button !== 0) return;
+                    
+                    e.preventDefault();
+                    draggedElement = this;
+                    
+                    const rect = draggedElement.getBoundingClientRect();
+                    offset.x = e.clientX - rect.left;
+                    offset.y = e.clientY - rect.top;
+                    
+                    // Bring to front
+                    draggedElement.style.zIndex = '100';
+                    
+                    document.addEventListener('mousemove', drag);
+                    document.addEventListener('mouseup', stopDrag);
+                });
+                
+                // Add click to select functionality
+                equipment.addEventListener('click', function(e) {
+                    // Don't select if this is a Bunsen burner or if we're dragging
+                    if (this.classList.contains('bunsen-burner')) return;
+                    if (draggedElement) return;
+                    
+                    e.stopPropagation();
+                    
+                    if (selectedContainer) {
+                        selectedContainer.classList.remove('selected');
+                    }
+                    
+                    selectedContainer = this;
+                    selectedContainer.classList.add('selected');
+                });
+                
+                workbench.appendChild(equipment);
+                
+                return equipment;
+            }
+            
+            function drag(e) {
+                if (!draggedElement) return;
+                
+                const workbenchRect = workbench.getBoundingClientRect();
+                let newX = e.clientX - workbenchRect.left - offset.x;
+                let newY = e.clientY - workbenchRect.top - offset.y;
+                
+                // Keep the element within the workbench boundaries
+                newX = Math.max(0, Math.min(newX, workbenchRect.width - draggedElement.offsetWidth));
+                newY = Math.max(0, Math.min(newY, workbenchRect.height - draggedElement.offsetHeight));
+                
+                draggedElement.style.left = newX + 'px';
+                draggedElement.style.top = newY + 'px';
+            }
+            
+            function stopDrag() {
+                document.removeEventListener('mousemove', drag);
+                document.removeEventListener('mouseup', stopDrag);
+                
+                if (draggedElement) {
+                    // Return to normal z-index
+                    if (draggedElement.classList.contains('beaker') || 
+                        draggedElement.classList.contains('test-tube') || 
+                        draggedElement.classList.contains('flask')) {
+                        draggedElement.style.zIndex = '10';
+                    } else {
+                        draggedElement.style.zIndex = '5';
+                    }
+                    
+                    checkInteractions();
+                    draggedElement = null;
+                }
+            }
+            
+            // Clicking on workbench deselects container
+            workbench.addEventListener('click', function(e) {
+                if (e.target === workbench && selectedContainer) {
+                    selectedContainer.classList.remove('selected');
+                    selectedContainer = null;
+                }
+            });
+            
+            // Adding chemicals to containers
+            chemicalItems.forEach(item => {
+                item.addEventListener('mouseover', function(e) {
+                    tooltip.style.display = 'block';
+                    tooltip.textContent = this.querySelector('span').textContent;
+                    tooltip.style.left = (e.clientX + 15) + 'px';
+                    tooltip.style.top = (e.clientY + 15) + 'px';
+                });
+                
+                item.addEventListener('mousemove', function(e) {
+                    tooltip.style.left = (e.clientX + 15) + 'px';
+                    tooltip.style.top = (e.clientY + 15) + 'px';
+                });
+                
+                item.addEventListener('mouseout', function() {
+                    tooltip.style.display = 'none';
+                });
+                
+                item.addEventListener('click', function() {
+                    if (!selectedContainer) {
+                        showInfo('Please select a container first by clicking on it!');
+                        return;
+                    }
+                    
+                    const chemical = this.getAttribute('data-chemical');
+                    addChemical(chemical);
+                });
+            });
+            
+            function addChemical(chemical) {
+                if (!selectedContainer) return;
+                
+                const liquidElement = selectedContainer.querySelector('[id$="-liquid"]');
+                if (!liquidElement) return;
+                
+                // Add chemical to container's contents
+                const contents = JSON.parse(selectedContainer.getAttribute('data-contents') || '[]');
+                contents.push(chemical);
+                selectedContainer.setAttribute('data-contents', JSON.stringify(contents));
+                
+                // Update liquid level and color
+                let currentHeight = parseInt(liquidElement.style.height) || 0;
+                currentHeight = Math.min(currentHeight + 15, 95); // Cap at 95%
+                liquidElement.style.height = currentHeight + '%';
+                
+                // Update color based on contents
+                updateLiquidColor(selectedContainer);
+                
+                // Check for reactions
+                checkReactions(selectedContainer);
+                
+                // Visual feedback
+                selectedContainer.style.transform = 'scale(1.05)';
+                setTimeout(() => {
+                    selectedContainer.style.transform = 'scale(1)';
+                }, 200);
+            }
+            
+            function updateLiquidColor(container) {
+                const liquidElement = container.querySelector('[id$="-liquid"]');
+                if (!liquidElement) return;
+                
+                const contents = JSON.parse(container.getAttribute('data-contents') || '[]');
+                
+                if (contents.length === 0) {
+                    liquidElement.style.backgroundColor = 'transparent';
+                    return;
+                }
+                
+                // Enhanced color mixing based on contents
+                if (contents.includes('water') && contents.length === 1) {
+                    liquidElement.style.backgroundColor = '#64b5f6'; // Water blue
+                } else if (contents.includes('acid') && contents.length === 1) {
+                    liquidElement.style.backgroundColor = '#fff176'; // HCl yellow
+                } else if (contents.includes('base') && contents.length === 1) {
+                    liquidElement.style.backgroundColor = '#ba68c8'; // NaOH purple
+                } else if (contents.includes('salt') && contents.length === 1) {
+                    liquidElement.style.backgroundColor = '#e0e0e0'; // NaCl gray
+                } else if (contents.includes('indicator') && contents.length === 1) {
+                    liquidElement.style.backgroundColor = '#ff8a65'; // Phenolphthalein orange
+                } else if (contents.includes('copper-sulfate') && contents.length === 1) {
+                    liquidElement.style.backgroundColor = '#4fc3f7'; // CuSO₄ light blue
+                } else if (contents.includes('iron-powder') && contents.length === 1) {
+                    liquidElement.style.backgroundColor = '#a1887f'; // Iron brown
+                } else if (contents.includes('acid') && contents.includes('base')) {
+                    // Acid-base neutralization
+                    if (contents.includes('indicator')) {
+                        liquidElement.style.backgroundColor = '#9c27b0'; // Deep purple with indicator
+                    } else {
+                        liquidElement.style.backgroundColor = '#bdbdbd'; // Light gray salt solution
+                    }
+                } else if (contents.includes('water') && contents.includes('salt')) {
+                    liquidElement.style.backgroundColor = '#bbdefb'; // Very light blue salt solution
+                } else if (contents.includes('water') && contents.includes('copper-sulfate')) {
+                    liquidElement.style.backgroundColor = '#2196f3'; // Bright blue copper sulfate solution
+                } else if (contents.includes('water') && contents.includes('iron-powder')) {
+                    liquidElement.style.backgroundColor = '#8d6e63'; // Rust brown
+                } else if (contents.includes('acid') && contents.includes('iron-powder')) {
+                    liquidElement.style.backgroundColor = '#78909c'; 
+                } else {
+                    liquidElement.style.backgroundColor = '#90a4ae';
+                }
+                
+                // Handle special indicators
+                if (contents.includes('indicator')) {
+                    if (contents.includes('acid')) {
+                        liquidElement.style.backgroundColor = '#f44336'; 
+                    } else if (contents.includes('base')) {
+                        liquidElement.style.backgroundColor = '#4caf50'; 
+                    }
+                }
+            }
+            
+            function checkReactions(container) {
+                const contents = JSON.parse(container.getAttribute('data-contents') || '[]');
+                
+                if (contents.includes('acid') && contents.includes('base')) {
+                    if (contents.includes('indicator')) {
+                        showInfo('<strong>Neutralization Reaction</strong><br>Dragon\'s Bile + Phoenix Ash → Mermaid Tears + Moonwater<br>The Fairy Dust shows the solution is now neutral (pH 7).');
+                    } else {
+                        showInfo('<strong>Neutralization Reaction</strong><br>Dragon\'s Bile + Phoenix Ash → Mermaid Tears + Moonwater<br>An acid and base react to form salt and water.');
+                    }
+                } else if (contents.includes('water') && contents.includes('salt')) {
+                    showInfo('<strong>Dissolution</strong><br>Mermaid Tears dissolve in Moonwater to form a salt solution.<br>The Na⁺ and Cl⁻ ions separate in the polar water molecules.');
+                } else if (contents.includes('water') && contents.includes('copper-sulfate')) {
+                    showInfo('<strong>Dissolution</strong><br>Blue Dragon Scale dissolves in Moonwater forming a blue solution of Cu²⁺ and SO₄²⁻ ions.');
+                } else if (contents.includes('acid') && contents.includes('indicator')) {
+                    showInfo('<strong>Acid-Base Indicator</strong><br>The Fairy Dust turns red in acidic solution (pH < 7).');
+                } else if (contents.includes('base') && contents.includes('indicator')) {
+                    showInfo('<strong>Acid-Base Indicator</strong><br>The Fairy Dust turns green in basic solution (pH > 7).');
+                } else if (contents.includes('water') && contents.includes('iron-powder')) {
+                    showInfo('<strong>Oxidation Reaction</strong><br>Goblin Iron slowly oxidizes in Moonwater (4Fe + 3O₂ + 6H₂O → 4Fe(OH)₃).<br>This is the rusting process.');
+                } else if (contents.includes('acid') && contents.includes('iron-powder')) {
+                    showInfo('<strong>Single Displacement Reaction</strong><br>Goblin Iron + Dragon\'s Bile → Iron(II) Chloride + Hydrogen Gas<br>Iron reacts with hydrochloric acid to produce iron(II) chloride and hydrogen gas.');
+                }
+            }
+            
+            function heatNearbyContainers(burner) {
+                if (!burner.classList.contains('burner-on')) {
+
+                    const containers = workbench.querySelectorAll('.beaker, .test-tube, .flask');
+                    containers.forEach(container => {
+                        const bubbles = container.querySelector('.bubbles');
+                        if (bubbles) {
+                            container.removeChild(bubbles);
+                        }
+                    });
+                    return;
+                }
+                
+                const burnerRect = burner.getBoundingClientRect();
+                const burnerCenterX = burnerRect.left + burnerRect.width / 2;
+                const burnerTop = burnerRect.top;
+                
+                const containers = workbench.querySelectorAll('.beaker, .test-tube, .flask');
+                
+                containers.forEach(container => {
+                    const containerRect = container.getBoundingClientRect();
+                    const containerCenterX = containerRect.left + containerRect.width / 2;
+                    const containerBottom = containerRect.top + containerRect.height;
+                    
+
+                    const horizontalDistance = Math.abs(containerCenterX - burnerCenterX);
+                    const verticalDistance = Math.abs(containerBottom - burnerTop);
+                    
+                    if (horizontalDistance < 60 && verticalDistance < 80) {
+
+                        const contents = JSON.parse(container.getAttribute('data-contents') || '[]');
+                        processHeating(container, contents);
+                    }
+                });
+            }
+            
+            function processHeating(container, contents) {
+                const liquidElement = container.querySelector('[id$="-liquid"]');
+                
+                if (contents.includes('water')) {
+                    showInfo('<strong>Boiling Water</strong><br>The Moonwater is heating up and will eventually boil at 100°C (212°F).');
+                    
+                    // Add bubbles effect for boiling
+                    if (!container.querySelector('.bubbles')) {
+                        const bubbles = document.createElement('div');
+                        bubbles.className = 'bubbles';
+                        container.appendChild(bubbles);
+                    }
+                }
+                
+                if (contents.includes('copper-sulfate') && contents.includes('water')) {
+                    showInfo('<strong>Crystallization</strong><br>Heating Blue Dragon Scale solution causes the Moonwater to evaporate, leaving blue crystals.');
+                    if (liquidElement) {
+                        liquidElement.style.backgroundColor = '#00acc1';
+                    }
+                }
+                
+                if (contents.includes('acid') && contents.includes('iron-powder')) {
+                    showInfo('<strong>Exothermic Reaction</strong><br>Dragonfire accelerates the reaction: Goblin Iron + Dragon\'s Bile → Iron(II) Chloride + Hydrogen Gas<br>Hydrogen gas is produced (test with a flaming splint for a pop sound).');
+                    if (liquidElement) {
+                        liquidElement.style.backgroundColor = '#78909c';
+                    }
+                }
+            }
+            
+            function checkInteractions() {
+
+            }
+            
+
+            resetBtn.addEventListener('click', function() {
+                while (workbench.firstChild) {
+                    workbench.removeChild(workbench.firstChild);
+                }
+
+                workbench.appendChild(document.createElement('div')).className = 'workbench-grid';
+                
+                selectedContainer = null;
+                reactionInfo.style.display = 'none';
+                
+
+                this.textContent = 'Cauldron Cleared!';
+                setTimeout(() => {
+                    this.textContent = 'Reset Cauldron';
+                }, 2000);
+            });
+            
+
+            function showInfo(message) {
+                reactionInfo.innerHTML = message;
+                reactionInfo.style.display = 'block';
+                
+
+                setTimeout(() => {
+                    reactionInfo.style.display = 'none';
+                }, 5000);
+            }
+        });
+    </script>
+</body>
+</html>
